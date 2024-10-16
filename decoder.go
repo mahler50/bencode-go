@@ -1,10 +1,9 @@
-package bencodego
+package bencode
 
 import (
 	"bufio"
 	"bytes"
 	"errors"
-	"io"
 	"strconv"
 )
 
@@ -116,24 +115,4 @@ func optimisticReadBytes(data *bufio.Reader, delim byte) (buffer []byte, err err
 		return data.ReadSlice(delim)
 	}
 	return data.ReadBytes(delim)
-}
-
-// bufio.Reader version of readAtLeast
-// copy from io.ReadAtLeast
-func readAtLeast(r *bufio.Reader, buf []byte, min int) (n int, err error) {
-	if len(buf) < min {
-		return 0, io.ErrShortBuffer
-	}
-
-	for n < min && err == nil {
-		var nn int
-		nn, err = r.Read(buf[n:])
-		n += nn
-	}
-	if n >= min {
-		err = nil
-	} else if n > 0 && err == io.EOF {
-		err = io.ErrUnexpectedEOF
-	}
-	return
 }
